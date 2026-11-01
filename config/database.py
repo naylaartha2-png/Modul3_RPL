@@ -17,10 +17,8 @@ class Database:
                 user=self.username,
                 password=self.password
             )
-
             if self.conn.is_connected():
                 return self.conn
-
         except Error as e:
             print(f"Koneksi Gagal: {e}")
             return None

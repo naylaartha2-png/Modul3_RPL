@@ -11,13 +11,13 @@ class BukuController:
         self.model = BukuModel()
         self.view = BukuView()
 
-        # Menampilkan role pada judul jendela
+        # Menampilkan informasi role pada judul jendela aplikasi
         self.view.title(f"Sistem Manajemen Perpustakaan - Mode: {self.user_role.upper()}")
 
         # Menyimpan id_buku dari baris tabel yang sedang dipilih
         self.id_terpilih = None
 
-        # Binding tombol
+        # Binding (mengikat) tombol di View dengan fungsi di Controller
         self.view.btn_simpan.configure(command=self.simpan_data)
         self.view.btn_hapus.configure(command=self.hapus_data)
         self.view.btn_update.configure(command=self.perbarui_data)
@@ -26,7 +26,7 @@ class BukuController:
         # Event klik pada baris tabel
         self.view.tabel.bind("<<TreeviewSelect>>", self.pilih_baris)
 
-        # OTORISASI: selain admin, kunci form dan semua tombol manipulasi data
+        # OTORISASI: Jika bukan admin, nonaktifkan form input dan semua tombol manipulasi
         if self.user_role != "admin":
             self.view.btn_simpan.configure(state="disabled", text="Akses Terkunci (Khusus Admin)")
             self.view.btn_update.configure(state="disabled", text="Akses Terkunci (Khusus Admin)")
@@ -35,6 +35,7 @@ class BukuController:
             self.view.entry_penulis.configure(state="disabled")
             self.view.entry_tahun.configure(state="disabled")
 
+        # Memuat data ke tabel saat aplikasi pertama kali dibuka
         self.muat_data_tabel()
 
     # ------------------------------------------------------------------
@@ -62,14 +63,11 @@ class BukuController:
     # EVENT: baris tabel diklik
     # ------------------------------------------------------------------
     def pilih_baris(self, event=None):
-        # Anggota hanya melihat data, form tidak perlu diisi
-        if self.user_role != "admin":
-            return
-
         pilihan = self.view.tabel.selection()
         if not pilihan:
             return
 
+        # values = (id_buku, judul, penulis, tahun_terbit)
         nilai = self.view.tabel.item(pilihan[0])['values']
         self.id_terpilih = nilai[0]
 
@@ -160,9 +158,6 @@ class BukuController:
         else:
             messagebox.showerror("Error", "Terjadi kesalahan saat memperbarui data.")
 
-    # ------------------------------------------------------------------
-    # LOGOUT (Tugas 3)
-    # ------------------------------------------------------------------
     def logout(self):
         # Import di dalam method untuk menghindari circular import
         from controllers.auth_controller import AuthController
@@ -170,5 +165,6 @@ class BukuController:
         self.view.destroy()
         AuthController().run()
 
+    # Fungsi untuk menyalakan aplikasi
     def run(self):
         self.view.mainloop()

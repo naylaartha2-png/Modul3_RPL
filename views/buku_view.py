@@ -6,7 +6,7 @@ class BukuView(ctk.CTk):
     def __init__(self):
         super().__init__()
         self.title("Sistem Manajemen Perpustakaan")
-        self.geometry("800x580")
+        self.geometry("800x520")
 
         # Konfigurasi Grid Utama (1 Baris, 2 Kolom)
         self.grid_columnconfigure(0, weight=1)  # Kolom Kiri (Form)
@@ -42,13 +42,8 @@ class BukuView(ctk.CTk):
         self.btn_hapus = ctk.CTkButton(self.frame_kiri, text="Hapus Data (Delete)", fg_color="red")
         self.btn_hapus.pack(pady=5, padx=15, fill="x")
 
-        # [TUGAS 3] Tombol Logout
-        self.btn_logout = ctk.CTkButton(
-            self.frame_kiri,
-            text="Logout",
-            fg_color="gray",
-            hover_color="dimgray"
-        )
+        # Tombol Logout
+        self.btn_logout = ctk.CTkButton(self.frame_kiri,text="Logout",fg_color="gray",hover_color="dimgray")
         self.btn_logout.pack(pady=(20, 10), padx=15, fill="x")
 
         # ==========================================
@@ -60,15 +55,17 @@ class BukuView(ctk.CTk):
         ctk.CTkLabel(self.frame_kanan, text="Daftar Koleksi Buku",
                      font=("Arial", 16, "bold")).pack(pady=15)
 
-        # Komponen Tabel (Treeview)
+        # Komponen Tabel (Treeview dari tkinter standar)
         kolom = ("id", "judul", "penulis", "tahun")
         self.tabel = ttk.Treeview(self.frame_kanan, columns=kolom, show="headings", height=15)
 
+        # Konfigurasi Header Tabel
         self.tabel.heading("id", text="ID")
         self.tabel.heading("judul", text="Judul Buku")
         self.tabel.heading("penulis", text="Penulis")
         self.tabel.heading("tahun", text="Tahun")
 
+        # Konfigurasi Lebar Kolom
         self.tabel.column("id", width=40, anchor="center")
         self.tabel.column("judul", width=150)
         self.tabel.column("penulis", width=120)
